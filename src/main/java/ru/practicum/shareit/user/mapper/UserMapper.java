@@ -19,4 +19,13 @@ public class UserMapper {
                 .email(user.getEmail())
                 .build();
     }
+
+    public static void updateFromDto(UserDto userDto, User user) {
+        if (userDto.getName() != null) {
+            user.setName(userDto.getName());
+        }
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+    }
 }

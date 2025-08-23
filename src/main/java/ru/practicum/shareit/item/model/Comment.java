@@ -4,36 +4,35 @@ import jakarta.persistence.*;
 import lombok.*;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.List;
+import java.time.Instant;
 
 @Entity
-@Table(name = "items")
+@Table(name = "comments")
 @Getter
 @Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Item {
+public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private String name;
+    private String text;
 
-    @Column
-    private String description;
-
-    @Column(name = "is_available")
-    private Boolean available;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    @ToString.Exclude
+    private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(name = "author_id")
     @ToString.Exclude
-    private User owner;
+    private User author;
 
-    @OneToMany
-    @JoinColumn(name = "item_id")
-    private List<Comment> comments;
+    @Column
+    private Instant created;
 }

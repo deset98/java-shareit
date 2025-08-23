@@ -1,20 +1,25 @@
 package ru.practicum.shareit.user.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
+@Entity
+@Table(name = "users")
+@Getter
+@Setter
+@ToString
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class User {
 
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
     private String name;
 
-    @Email(message = "Поле email неверно заполнено")
-    @NotBlank(message = "Поле email не может быть пустым")
+    @Column
     private String email;
 }
