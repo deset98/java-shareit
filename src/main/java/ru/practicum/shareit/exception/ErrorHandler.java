@@ -19,6 +19,25 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN) //403
+    public ErrorResponse handleValidationException(final ForbiddenException e) {
+        return new ErrorResponse(
+                "Объект не доступен.",
+                e.getMessage()
+        );
+    }
+
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST) //400
+    public ErrorResponse handleValidationException(final BadRequestException e) {
+        return new ErrorResponse(
+                "Ошибка в запросе.",
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND) //404
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
         return new ErrorResponse(
