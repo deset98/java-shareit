@@ -44,8 +44,8 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> getAvailableItems(@RequestParam(name = "text") String substring) {
-        return itemService.searchItemsBySubstring(substring);
+    public List<ItemDto> getAvailableItems(@RequestParam(name = "text") String text) {
+        return itemService.searchItemsBySubstring(text);
     }
 
     @PostMapping("{itemId}/comment")
