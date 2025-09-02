@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.util.Headers;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.exception.BadRequestException;
 
@@ -20,7 +21,7 @@ public class BookingController {
     private final BookingClient bookingClient;
 
     @PostMapping
-    public ResponseEntity<Object> createBooking(@RequestHeader("X-Sharer-User-Id") long userId,
+    public ResponseEntity<Object> createBooking(@RequestHeader(Headers.USER_ID) long userId,
                                                 @RequestBody @Valid BookingRequestDto requestDto) {
         log.info("Creating booking {}, userId={}", requestDto, userId);
 
@@ -36,14 +37,14 @@ public class BookingController {
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> approveBooking(@PathVariable long bookingId,
                                                  @RequestParam boolean approved,
-                                                 @RequestHeader("X-Sharer-User-Id") long userId) {
+                                                 @RequestHeader(Headers.USER_ID) long userId) {
         log.info("Approving booking {}, userId={}", bookingId, userId);
         return bookingClient.approveBooking(userId, bookingId, approved);
     }
 
     @GetMapping("/owner")
     public ResponseEntity<Object> getBookingsByOwner(@RequestParam(required = false) String stateParam,
-                                                     @RequestHeader("X-Sharer-User-Id") long userId) {
+                                                     @RequestHeader(Headers.USER_ID) long userId) {
         State state = State.from(stateParam)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
         log.info("Get booking with state {}, userId={}", state, userId);
@@ -51,7 +52,7 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getListByUser(@RequestHeader("X-Sharer-User-Id") long userId,
+    public ResponseEntity<Object> getListByUser(@RequestHeader(Headers.USER_ID) long userId,
                                                 @RequestParam(name = "state", defaultValue = "ALL") String stateParam) {
         State state = State.from(stateParam)
                 .orElseThrow(() -> new IllegalArgumentException("Неизвестный state: " + stateParam));
@@ -60,7 +61,7 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public ResponseEntity<Object> getBooking(@RequestHeader("X-Sharer-User-Id") long userId,
+    public ResponseEntity<Object> getBooking(@RequestHeader(Headers.USER_ID) long userId,
                                              @PathVariable long bookingId) {
         log.info("Get booking {}, userId={}", bookingId, userId);
         return bookingClient.getBooking(userId, bookingId);

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.ItemRequestService.ItemRequestService;
 import ru.practicum.shareit.request.dto.NewItemRequestDto;
 import ru.practicum.shareit.request.dto.RespItemRequestDto;
+import ru.practicum.shareit.util.Headers;
 
 import java.util.List;
 
@@ -22,18 +23,18 @@ public class ItemRequestController {
     }
 
     @PostMapping
-    public RespItemRequestDto create(@RequestHeader("X-Sharer-User-Id") long userId,
+    public RespItemRequestDto create(@RequestHeader(Headers.USER_ID) long userId,
                                      @RequestBody final NewItemRequestDto dto) {
         return itemRequestService.create(userId, dto);
     }
 
     @GetMapping
-    public List<RespItemRequestDto> getAllByUserId(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public List<RespItemRequestDto> getAllByUserId(@RequestHeader(Headers.USER_ID) long userId) {
         return itemRequestService.getAllByUserId(userId);
     }
 
     @GetMapping("/all")
-    public List<RespItemRequestDto> getAllFromOtherUsers(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public List<RespItemRequestDto> getAllFromOtherUsers(@RequestHeader(Headers.USER_ID) long userId) {
         return itemRequestService.getAllFromOtherUsers(userId);
     }
 

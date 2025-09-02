@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.util.Headers;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
@@ -23,8 +24,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<Object> addItem(@Valid @RequestBody ItemDto itemDto,
-                                          @RequestHeader("X-Sharer-User-Id") long userId) {
-
+                                          @RequestHeader(Headers.USER_ID) long userId) {
         log.debug("POST/items - adding new item {} by user {}",
                 itemDto.getName(),
                 userId);
@@ -35,17 +35,15 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> editItem(@Valid @RequestBody ItemDto itemDto,
                                            @PathVariable long itemId,
-                                           @RequestHeader("X-Sharer-User-Id") long userId) {
-
+                                           @RequestHeader(Headers.USER_ID) long userId) {
         log.debug("PATCH/item/id - adding new item {} by user {}",
                 itemDto.getName(),
                 userId);
-
         return itemClient.editItem(itemDto, itemId, userId);
     }
 
     @GetMapping
-    public ResponseEntity<Object> getItems(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public ResponseEntity<Object> getItems(@RequestHeader(Headers.USER_ID) long userId) {
 
         log.debug("GET/items: all items of the user {} returned", userId);
 
@@ -74,7 +72,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> addComment(@PathVariable long itemId,
                                              @Valid @RequestBody CommentRequestDto commentDto,
-                                             @RequestHeader("X-Sharer-User-Id") long userId) {
+                                             @RequestHeader(Headers.USER_ID) long userId) {
         return itemClient.addComment(itemId, commentDto, userId);
     }
 }
